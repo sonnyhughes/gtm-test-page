@@ -1,0 +1,24 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files (not used, but ignored by default)
+.env
+.env.*
+
+# Build artifacts (future-proofing)
+dist/
+build/
+
+# Misc
+coverage/
