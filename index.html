@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LinkedIn CAPI (GTM Server-Side) Lead Demo</title>
+
+  <!-- =========================
+       Google Tag Manager (GTM)
+       Replace GTM-XXXXXXX with your Web GTM Container ID.
+       ========================= -->
+  <script>
+    // GTM_CONTAINER_ID is for human readability only.
+    // The GTM snippet below still contains the placeholder string you must replace.
+    const GTM_CONTAINER_ID = "GTM-XXXXXXX";
+  </script>
+  <script>
+    (function (w, d, s, l, i) {
+      w[l] = w[l] || [];
+      w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+      var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s),
+        dl = l != "dataLayer" ? "&l=" + l : "";
+      j.async = true;
+      j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+      f.parentNode.insertBefore(j, f);
+    })(window, document, "script", "dataLayer", "GTM-XXXXXXX");
+  </script>
+
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #101a2e;
+      --muted: #9fb0d0;
+      --text: #e8eefc;
+      --accent: #66a3ff;
+      --danger: #ff6b6b;
+      --ok: #34d399;
+      --border: rgba(255,255,255,0.10);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(102,163,255,0.18), transparent 50%),
+                  radial-gradient(1000px 700px at 80% 30%, rgba(52,211,153,0.12), transparent 50%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 18px 56px;
+    }
+
+    header {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      padding: 6px 10px;
+      border-radius: 999px;
+      width: fit-content;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+    }
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      max-width: 72ch;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 920px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: rgba(16,26,46,0.85);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.28);
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    ul {
+      margin: 8px 0 0 18px;
+      color: var(--muted);
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 520px) {
+      .row { grid-template-columns: 1fr; }
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input, select, button, textarea {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      padding: 10px 12px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    input::placeholder { color: rgba(232,238,252,0.45); }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(102,163,255,0.7);
+      box-shadow: 0 0 0 4px rgba(102,163,255,0.15);
+    }
+
+    .field { margin-bottom: 12px; }
+    .error {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--danger);
+      min-height: 16px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 600;
+      border: 1px solid rgba(102,163,255,0.45);
+      background: linear-gradient(180deg, rgba(102,163,255,0.18), rgba(102,163,255,0.08));
+    }
+
+    button.secondary {
+      border-color: var(--border);
+      background: rgba(255,255,255,0.04);
+    }
+
+    button:active { transform: translateY(1px); }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .ok { color: var(--ok); }
+    .muted { color: var(--muted); }
+
+    .success {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(52,211,153,0.35);
+      background: rgba(52,211,153,0.08);
+      color: var(--text);
+      display: none;
+    }
+
+    .debug {
+      display: grid;
+      gap: 10px;
+    }
+
+    .debugHead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    pre {
+      margin: 0;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.22);
+      overflow: auto;
+      max-height: 340px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12.5px;
+      line-height: 1.35;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .tiny {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    a { color: var(--accent); }
+    a:hover { opacity: 0.9; }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 12px 0;
+    }
+  </style>
+
+  <script>
+    /**
+     * =========================
+     * LinkedIn Click ID Capture
+     * Query parameter: li_fat_id
+     * Saves as user_id for user_data.user_id
+     * Implements modern + legacy fallback.
+     * =========================
+     */
+
+    // Modern browsers
+    function getLiFatIdModern() {
+      try {
+        return (new URLSearchParams(window.location.search)).get("li_fat_id") || "";
+      } catch (e) {
+        return "";
+      }
+    }
+
+    // Legacy fallback (similar to LinkedIn snippet)
+    function getParamLegacy(param) {
+      try {
+        const parts = window.location.href.split("?");
+        if (parts.length < 2) return "";
+        const queryParams = parts[1].split("#")[0]; // strip hash if present
+        const queryKeyValues = queryParams.split("&");
+        for (const keyValue of queryKeyValues) {
+          const kv = keyValue.split("=");
+          const key = kv[0];
+          const value = kv.slice(1).join("="); // in case value also contains '='
+          if (key === param) return decodeURIComponent(value || "");
+        }
+        return "";
+      } catch (e) {
+        return "";
+      }
+    }
+
+    function getLiFatId() {
+      const modern = getLiFatIdModern();
+      if (modern) return modern;
+      return getParamLegacy("li_fat_id") || "";
+    }
+  </script>
+
+  <script>
+    /**
+     * =========================
+     * dataLayer Initialization
+     * + Debug Panel Interceptor
+     * =========================
+     */
+    window.dataLayer = window.dataLayer || [];
+
+    (function patchDataLayerPush() {
+      const dl = window.dataLayer;
+
+      // Keep a reference to original push
+      const originalPush = dl.push.bind(dl);
+
+      // Patch push to intercept events and update debug panel
+      dl.push = function () {
+        const result = originalPush(...arguments);
+
+        // The latest pushed object is typically the first argument.
+        const latest = arguments && arguments.length ? arguments[0] : undefined;
+
+        try {
+          window.__latestDataLayerEvent = latest;
+          if (typeof window.renderDebugPanel === "function") {
+            window.renderDebugPanel(latest);
+          }
+        } catch (e) {
+          // no-op
+        }
+
+        return result;
+      };
+
+      // Expose original push in case you need it for debugging
+      window.__originalDataLayerPush = originalPush;
+    })();
+
+    /**
+     * Fire baseline page_view on load
+     * Demonstrates baseline GA4 collection pattern via dataLayer.
+     */
+    window.dataLayer.push({
+      event: "page_view",
+      page_location: window.location.href,
+      page_path: window.location.pathname,
+      page_title: document.title
+    });
+  </script>
+</head>
+
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript>
+
+  <div class="container">
+    <header>
+      <div class="badge">
+        <span>Demo Page</span>
+        <span class="tiny">LinkedIn CAPI Tag + GTM Server-Side</span>
+      </div>
+      <h1>Lead Form Demo for LinkedIn CAPI (via GA4 Client in sGTM)</h1>
+      <p class="sub">
+        Use this page to show advertisers a proper <code>dataLayer</code> implementation for lead capture,
+        how a <strong>GA4 client</strong> receives event + <code>user_data</code>, and how the <strong>LinkedIn CAPI Tag</strong> can consume it in GTM Server-Side.
+      </p>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT: Form -->
+      <section class="card" aria-labelledby="leadFormTitle">
+        <h2 id="leadFormTitle">Lead Form</h2>
+        <p class="note">
+          On submit, this page pushes a <code>lead_submission</code> event to <code>dataLayer</code> with a <code>user_data</code> object.
+          Use GTM Preview mode (Web + Server) to verify the payload.
+        </p>
+
+        <div class="divider"></div>
+
+        <form id="leadForm" novalidate>
+          <div class="row">
+            <div class="field">
+              <label for="first_name">First name</label>
+              <input id="first_name" name="first_name" type="text" placeholder="Jane" autocomplete="given-name" required />
+              <div class="error" id="err_first_name"></div>
+            </div>
+
+            <div class="field">
+              <label for="last_name">Last name</label>
+              <input id="last_name" name="last_name" type="text" placeholder="Doe" autocomplete="family-name" required />
+              <div class="error" id="err_last_name"></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" placeholder="jane.doe@company.com" autocomplete="email" required />
+            <div class="error" id="err_email"></div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="company_name">Company name</label>
+              <input id="company_name" name="company_name" type="text" placeholder="Acme Inc." autocomplete="organization" required />
+              <div class="error" id="err_company_name"></div>
+            </div>
+
+            <div class="field">
+              <label for="job_title">Job title</label>
+              <input id="job_title" name="job_title" type="text" placeholder="Marketing Manager" autocomplete="organization-title" required />
+              <div class="error" id="err_job_title"></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="country">Country (ISO 2-letter code)</label>
+            <select id="country" name="country" required>
+              <option value="" selected disabled>Select a country</option>
+              <option value="US">United States (US)</option>
+              <option value="CA">Canada (CA)</option>
+              <option value="GB">United Kingdom (GB)</option>
+              <option value="AU">Australia (AU)</option>
+              <option value="DE">Germany (DE)</option>
+              <option value="FR">France (FR)</option>
+              <option value="IN">India (IN)</option>
+              <option value="JP">Japan (JP)</option>
+              <option value="SG">Singapore (SG)</option>
+              <option value="BR">Brazil (BR)</option>
+            </select>
+            <div class="error" id="err_country"></div>
+            <div class="tiny">Tip: keep the dropdown short for MVP; expand later if needed.</div>
+          </div>
+
+          <div class="actions">
+            <button type="submit">Submit lead</button>
+            <button type="button" class="secondary" id="resetBtn">Reset</button>
+          </div>
+
+          <div class="success" id="successBox" role="status" aria-live="polite">
+            <strong class="ok">Success.</strong> <span class="muted">Pushed <code>lead_submission</code> to <code>dataLayer</code>. Check the Debug Panel and GTM Preview.</span>
+          </div>
+        </form>
+
+        <div class="divider"></div>
+
+        <div class="actions" style="margin-top:0;">
+          <span class="pill">
+            Captured <code>li_fat_id</code>:
+            <strong id="liFatIdDisplay" class="ok">-</strong>
+          </span>
+          <button type="button" class="secondary" id="copySampleUrlBtn">Copy sample URL with li_fat_id</button>
+        </div>
+
+        <p class="tiny" style="margin-top:10px;">
+          Demo tip: open this page with <code>?li_fat_id=TEST123</code>, then submit the form.
+          The value will be included as <code>user_data.user_id</code>.
+        </p>
+      </section>
+
+      <!-- RIGHT: Debug + Notes -->
+      <aside class="card debug" aria-labelledby="debugTitle">
+        <div class="debugHead">
+          <h2 id="debugTitle" style="margin:0;">Debug Panel</h2>
+          <div class="actions" style="margin:0;">
+            <button type="button" class="secondary" id="copyJsonBtn">Copy JSON</button>
+            <button type="button" class="secondary" id="clearDebugBtn">Clear</button>
+          </div>
+        </div>
+
+        <p class="note" style="margin-top:0;">
+          Shows the <strong>latest</strong> object pushed to <code>dataLayer</code>. It updates automatically when:
+          <code>page_view</code> fires on load and when the form pushes <code>lead_submission</code>.
+        </p>
+
+        <pre id="debugPre">{}</pre>
+
+        <div class="divider"></div>
+
+        <h2 style="margin:0;">Demo Notes</h2>
+        <ul>
+          <li>Append <code>?li_fat_id=TEST123</code> to the URL (or use the button).</li>
+          <li>Open GTM Preview mode (Web container + Server container).</li>
+          <li>Confirm <code>page_view</code> on load and <code>lead_submission</code> on form submit.</li>
+          <li>In Server-Side, verify the GA4 client receives <code>user_data</code>, then confirm the LinkedIn CAPI tag uses it.</li>
+        </ul>
+
+        <p class="tiny">
+          Reference: LinkedIn CAPI GTM guide and first-party cookies snippet (provided in your prompt).
+        </p>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * =========================
+     * Debug Panel Renderer
+     * (called by patched dataLayer.push)
+     * =========================
+     */
+    (function initDebugPanel() {
+      const debugPre = document.getElementById("debugPre");
+      const copyJsonBtn = document.getElementById("copyJsonBtn");
+      const clearDebugBtn = document.getElementById("clearDebugBtn");
+
+      window.renderDebugPanel = function (latestObj) {
+        const safe = latestObj !== undefined ? latestObj : {};
+        debugPre.textContent = JSON.stringify(safe, null, 2);
+      };
+
+      // On first paint, show the most recent event if available
+      if (window.__latestDataLayerEvent !== undefined) {
+        window.renderDebugPanel(window.__latestDataLayerEvent);
+      } else {
+        debugPre.textContent = "{}";
+      }
+
+      copyJsonBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(debugPre.textContent || "{}");
+          copyJsonBtn.textContent = "Copied";
+          setTimeout(() => (copyJsonBtn.textContent = "Copy JSON"), 900);
+        } catch (e) {
+          alert("Clipboard copy failed. You can manually select and copy the JSON.");
+        }
+      });
+
+      clearDebugBtn.addEventListener("click", () => {
+        debugPre.textContent = "{}";
+      });
+    })();
+  </script>
+
+  <script>
+    /**
+     * =========================
+     * Lead Form Submission
+     * Validates input, then pushes lead_submission to dataLayer.
+     * Payload uses Google Common Event schema style user_data.
+     * =========================
+     */
+
+    (function initLeadForm() {
+      const userId = getLiFatId(); // li_fat_id from URL
+      const liFatIdDisplay = document.getElementById("liFatIdDisplay");
+      liFatIdDisplay.textContent = userId ? userId : "(none)";
+
+      const copySampleUrlBtn = document.getElementById("copySampleUrlBtn");
+      copySampleUrlBtn.addEventListener("click", async () => {
+        const base = window.location.origin + window.location.pathname;
+        const sampleUrl = base + "?li_fat_id=TEST123";
+        try {
+          await navigator.clipboard.writeText(sampleUrl);
+          copySampleUrlBtn.textContent = "Copied sample URL";
+          setTimeout(() => (copySampleUrlBtn.textContent = "Copy sample URL with li_fat_id"), 1200);
+        } catch (e) {
+          alert("Clipboard copy failed. Here is the sample URL:\n\n" + sampleUrl);
+        }
+      });
+
+      const form = document.getElementById("leadForm");
+      const successBox = document.getElementById("successBox");
+      const resetBtn = document.getElementById("resetBtn");
+
+      const fields = {
+        first_name: document.getElementById("first_name"),
+        last_name: document.getElementById("last_name"),
+        email: document.getElementById("email"),
+        company_name: document.getElementById("company_name"),
+        job_title: document.getElementById("job_title"),
+        country: document.getElementById("country")
+      };
+
+      const errors = {
+        first_name: document.getElementById("err_first_name"),
+        last_name: document.getElementById("err_last_name"),
+        email: document.getElementById("err_email"),
+        company_name: document.getElementById("err_company_name"),
+        job_title: document.getElementById("err_job_title"),
+        country: document.getElementById("err_country")
+      };
+
+      function setError(name, msg) {
+        errors[name].textContent = msg || "";
+      }
+
+      function isBlank(v) {
+        return !v || !String(v).trim();
+      }
+
+      function isValidEmail(v) {
+        // Simple, demo-friendly email validation
+        const s = String(v || "").trim();
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+      }
+
+      function validate() {
+        let ok = true;
+
+        const first = fields.first_name.value.trim();
+        const last = fields.last_name.value.trim();
+        const email = fields.email.value.trim();
+        const company = fields.company_name.value.trim();
+        const title = fields.job_title.value.trim();
+        const country = fields.country.value;
+
+        // Clear previous errors
+        Object.keys(errors).forEach(k => setError(k, ""));
+
+        if (isBlank(first)) { setError("first_name", "Please enter a first name."); ok = false; }
+        if (isBlank(last)) { setError("last_name", "Please enter a last name."); ok = false; }
+
+        if (isBlank(email)) {
+          setError("email", "Please enter an email address.");
+          ok = false;
+        } else if (!isValidEmail(email)) {
+          setError("email", "Please enter a valid email address.");
+          ok = false;
+        }
+
+        if (isBlank(company)) { setError("company_name", "Please enter a company name."); ok = false; }
+        if (isBlank(title)) { setError("job_title", "Please enter a job title."); ok = false; }
+        if (isBlank(country)) { setError("country", "Please select a country."); ok = false; }
+
+        return ok;
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        successBox.style.display = "none";
+
+        if (!validate()) return;
+
+        const payload = {
+          event: "lead_submission",
+          user_data: {
+            email: fields.email.value.trim(),
+            user_id: userId || "",
+            address: {
+              first_name: fields.first_name.value.trim(),
+              last_name: fields.last_name.value.trim(),
+              country: fields.country.value
+            },
+            company_name: fields.company_name.value.trim(),
+            job_title: fields.job_title.value.trim()
+          }
+        };
+
+        // Push to dataLayer for GTM Web container pickup and GA4 -> sGTM flow
+        window.dataLayer.push(payload);
+
+        // Demo-friendly UI feedback
+        successBox.style.display = "block";
+        console.log("dataLayer push:", payload);
+      });
+
+      resetBtn.addEventListener("click", () => {
+        form.reset();
+        successBox.style.display = "none";
+        Object.keys(errors).forEach(k => setError(k, ""));
+      });
+    })();
+  </script>
+</body>
+</html>
