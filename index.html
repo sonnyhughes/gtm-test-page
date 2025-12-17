@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -36,16 +37,19 @@
       --accent: #66a3ff;
       --danger: #ff6b6b;
       --ok: #34d399;
-      --border: rgba(255,255,255,0.10);
+      --border: rgba(255, 255, 255, 0.10);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      background: radial-gradient(1200px 800px at 20% 10%, rgba(102,163,255,0.18), transparent 50%),
-                  radial-gradient(1000px 700px at 80% 30%, rgba(52,211,153,0.12), transparent 50%),
-                  var(--bg);
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(102, 163, 255, 0.18), transparent 50%),
+        radial-gradient(1000px 700px at 80% 30%, rgba(52, 211, 153, 0.12), transparent 50%),
+        var(--bg);
       color: var(--text);
       line-height: 1.4;
     }
@@ -67,7 +71,7 @@
       align-items: center;
       gap: 8px;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
+      background: rgba(255, 255, 255, 0.04);
       padding: 6px 10px;
       border-radius: 999px;
       width: fit-content;
@@ -80,6 +84,7 @@
       font-size: 28px;
       letter-spacing: -0.02em;
     }
+
     .sub {
       margin: 0;
       color: var(--muted);
@@ -94,16 +99,18 @@
     }
 
     @media (max-width: 920px) {
-      .grid { grid-template-columns: 1fr; }
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .card {
-      background: rgba(16,26,46,0.85);
+      background: rgba(16, 26, 46, 0.85);
       border: 1px solid var(--border);
       border-radius: 18px;
       padding: 16px;
       backdrop-filter: blur(8px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.28);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
     }
 
     .card h2 {
@@ -126,8 +133,11 @@
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
+
     @media (max-width: 520px) {
-      .row { grid-template-columns: 1fr; }
+      .row {
+        grid-template-columns: 1fr;
+      }
     }
 
     label {
@@ -137,25 +147,35 @@
       margin-bottom: 6px;
     }
 
-    input, select, button, textarea {
+    input,
+    select,
+    button,
+    textarea {
       width: 100%;
       border-radius: 12px;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
+      background: rgba(255, 255, 255, 0.04);
       color: var(--text);
       padding: 10px 12px;
       outline: none;
       font-size: 14px;
     }
 
-    input::placeholder { color: rgba(232,238,252,0.45); }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: rgba(102,163,255,0.7);
-      box-shadow: 0 0 0 4px rgba(102,163,255,0.15);
+    input::placeholder {
+      color: rgba(232, 238, 252, 0.45);
     }
 
-    .field { margin-bottom: 12px; }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(102, 163, 255, 0.7);
+      box-shadow: 0 0 0 4px rgba(102, 163, 255, 0.15);
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
     .error {
       margin-top: 6px;
       font-size: 12px;
@@ -173,16 +193,18 @@
     button {
       cursor: pointer;
       font-weight: 600;
-      border: 1px solid rgba(102,163,255,0.45);
-      background: linear-gradient(180deg, rgba(102,163,255,0.18), rgba(102,163,255,0.08));
+      border: 1px solid rgba(102, 163, 255, 0.45);
+      background: linear-gradient(180deg, rgba(102, 163, 255, 0.18), rgba(102, 163, 255, 0.08));
     }
 
     button.secondary {
       border-color: var(--border);
-      background: rgba(255,255,255,0.04);
+      background: rgba(255, 255, 255, 0.04);
     }
 
-    button:active { transform: translateY(1px); }
+    button:active {
+      transform: translateY(1px);
+    }
 
     .pill {
       display: inline-flex;
@@ -191,20 +213,25 @@
       padding: 8px 10px;
       border-radius: 999px;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
+      background: rgba(255, 255, 255, 0.04);
       color: var(--muted);
       font-size: 13px;
     }
 
-    .ok { color: var(--ok); }
-    .muted { color: var(--muted); }
+    .ok {
+      color: var(--ok);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
 
     .success {
       margin-top: 12px;
       padding: 10px 12px;
       border-radius: 12px;
-      border: 1px solid rgba(52,211,153,0.35);
-      background: rgba(52,211,153,0.08);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      background: rgba(52, 211, 153, 0.08);
       color: var(--text);
       display: none;
     }
@@ -227,7 +254,7 @@
       padding: 12px;
       border-radius: 14px;
       border: 1px solid var(--border);
-      background: rgba(0,0,0,0.22);
+      background: rgba(0, 0, 0, 0.22);
       overflow: auto;
       max-height: 340px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -242,8 +269,13 @@
       color: var(--muted);
     }
 
-    a { color: var(--accent); }
-    a:hover { opacity: 0.9; }
+    a {
+      color: var(--accent);
+    }
+
+    a:hover {
+      opacity: 0.9;
+    }
 
     .divider {
       height: 1px;
@@ -316,13 +348,9 @@
       dl.push = function () {
         const result = originalPush(...arguments);
 
-        // The latest pushed object is typically the first argument.
-        const latest = arguments && arguments.length ? arguments[0] : undefined;
-
         try {
-          window.__latestDataLayerEvent = latest;
           if (typeof window.renderDebugPanel === "function") {
-            window.renderDebugPanel(latest);
+            window.renderDebugPanel(); // render the whole dataLayer snapshot
           }
         } catch (e) {
           // no-op
@@ -351,8 +379,8 @@
 <body>
   <!-- Google Tag Manager (noscript) -->
   <noscript>
-    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KPR5LSH6"
-            height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KPR5LSH6" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe>
   </noscript>
 
   <div class="container">
@@ -364,7 +392,8 @@
       <h1>Lead Form Demo for LinkedIn CAPI (via GA4 Client in sGTM)</h1>
       <p class="sub">
         Use this page to show advertisers a proper <code>dataLayer</code> implementation for lead capture,
-        how a <strong>GA4 client</strong> receives event + <code>user_data</code>, and how the <strong>LinkedIn CAPI Tag</strong> can consume it in GTM Server-Side.
+        how a <strong>GA4 client</strong> receives event + <code>user_data</code>, and how the <strong>LinkedIn CAPI
+          Tag</strong> can consume it in GTM Server-Side.
       </p>
     </header>
 
@@ -373,7 +402,8 @@
       <section class="card" aria-labelledby="leadFormTitle">
         <h2 id="leadFormTitle">Lead Form</h2>
         <p class="note">
-          On submit, this page pushes a <code>lead_submission</code> event to <code>dataLayer</code> with a <code>user_data</code> object.
+          On submit, this page pushes a <code>lead_submission</code> event to <code>dataLayer</code> with a
+          <code>user_data</code> object.
           Use GTM Preview mode (Web + Server) to verify the payload.
         </p>
 
@@ -383,33 +413,38 @@
           <div class="row">
             <div class="field">
               <label for="first_name">First name</label>
-              <input id="first_name" name="first_name" type="text" placeholder="Jane" autocomplete="given-name" required />
+              <input id="first_name" name="first_name" type="text" placeholder="Jane" autocomplete="given-name"
+                required />
               <div class="error" id="err_first_name"></div>
             </div>
 
             <div class="field">
               <label for="last_name">Last name</label>
-              <input id="last_name" name="last_name" type="text" placeholder="Doe" autocomplete="family-name" required />
+              <input id="last_name" name="last_name" type="text" placeholder="Doe" autocomplete="family-name"
+                required />
               <div class="error" id="err_last_name"></div>
             </div>
           </div>
 
           <div class="field">
             <label for="email">Email address</label>
-            <input id="email" name="email" type="email" placeholder="jane.doe@company.com" autocomplete="email" required />
+            <input id="email" name="email" type="email" placeholder="jane.doe@company.com" autocomplete="email"
+              required />
             <div class="error" id="err_email"></div>
           </div>
 
           <div class="row">
             <div class="field">
               <label for="company_name">Company name</label>
-              <input id="company_name" name="company_name" type="text" placeholder="Acme Inc." autocomplete="organization" required />
+              <input id="company_name" name="company_name" type="text" placeholder="Acme Inc."
+                autocomplete="organization" required />
               <div class="error" id="err_company_name"></div>
             </div>
 
             <div class="field">
               <label for="job_title">Job title</label>
-              <input id="job_title" name="job_title" type="text" placeholder="Marketing Manager" autocomplete="organization-title" required />
+              <input id="job_title" name="job_title" type="text" placeholder="Marketing Manager"
+                autocomplete="organization-title" required />
               <div class="error" id="err_job_title"></div>
             </div>
           </div>
@@ -439,7 +474,8 @@
           </div>
 
           <div class="success" id="successBox" role="status" aria-live="polite">
-            <strong class="ok">Success.</strong> <span class="muted">Pushed <code>lead_submission</code> to <code>dataLayer</code>. Check the Debug Panel and GTM Preview.</span>
+            <strong class="ok">Success.</strong> <span class="muted">Pushed <code>lead_submission</code> to
+              <code>dataLayer</code>. Check the Debug Panel and GTM Preview.</span>
           </div>
         </form>
 
@@ -483,7 +519,8 @@
           <li>Append <code>?li_fat_id=TEST123</code> to the URL (or use the button).</li>
           <li>Open GTM Preview mode (Web container + Server container).</li>
           <li>Confirm <code>page_view</code> on load and <code>lead_submission</code> on form submit.</li>
-          <li>In Server-Side, verify the GA4 client receives <code>user_data</code>, then confirm the LinkedIn CAPI tag uses it.</li>
+          <li>In Server-Side, verify the GA4 client receives <code>user_data</code>, then confirm the LinkedIn CAPI tag
+            uses it.</li>
         </ul>
 
         <p class="tiny">
@@ -505,21 +542,26 @@
       const copyJsonBtn = document.getElementById("copyJsonBtn");
       const clearDebugBtn = document.getElementById("clearDebugBtn");
 
-      window.renderDebugPanel = function (latestObj) {
-        const safe = latestObj !== undefined ? latestObj : {};
-        debugPre.textContent = JSON.stringify(safe, null, 2);
+      function getDataLayerSnapshot() {
+        // Only stringify the array contents (events), not the patched push function or custom props.
+        try {
+          return Array.from(window.dataLayer || []);
+        } catch (e) {
+          return [];
+        }
+      }
+
+      window.renderDebugPanel = function () {
+        const snapshot = getDataLayerSnapshot();
+        debugPre.textContent = JSON.stringify(snapshot, null, 2);
       };
 
-      // On first paint, show the most recent event if available
-      if (window.__latestDataLayerEvent !== undefined) {
-        window.renderDebugPanel(window.__latestDataLayerEvent);
-      } else {
-        debugPre.textContent = "{}";
-      }
+      // On first paint, show the current dataLayer contents (should include page_view)
+      window.renderDebugPanel();
 
       copyJsonBtn.addEventListener("click", async () => {
         try {
-          await navigator.clipboard.writeText(debugPre.textContent || "{}");
+          await navigator.clipboard.writeText(debugPre.textContent || "[]");
           copyJsonBtn.textContent = "Copied";
           setTimeout(() => (copyJsonBtn.textContent = "Copy JSON"), 900);
         } catch (e) {
@@ -528,9 +570,11 @@
       });
 
       clearDebugBtn.addEventListener("click", () => {
-        debugPre.textContent = "{}";
+        // UI only; does NOT modify dataLayer history
+        debugPre.textContent = "[]";
       });
     })();
+
   </script>
 
   <script>
@@ -664,4 +708,5 @@
     })();
   </script>
 </body>
+
 </html>
