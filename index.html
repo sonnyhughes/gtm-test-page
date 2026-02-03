@@ -4,13 +4,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LinkedIn CAPI Lead Demo | GTM Server-Side</title>
+  <title>LinkedIn CAPI (GTM Server-Side) Lead Demo</title>
 
+  <!-- =========================
+       Google Tag Manager (GTM)
+       Replace GTM-XXXXXXX with your Web GTM Container ID.
+       ========================= -->
   <script>
+    // GTM_CONTAINER_ID is for human readability only.
+    // The GTM snippet below still contains the placeholder string you must replace.
     const GTM_CONTAINER_ID = "GTM-KPR5LSH6";
-    window.dataLayer = window.dataLayer || [];
   </script>
-  
   <script>
     (function (w, d, s, l, i) {
       w[l] = w[l] || [];
@@ -21,259 +25,760 @@
       j.async = true;
       j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
       f.parentNode.insertBefore(j, f);
-    })(window, document, "script", "dataLayer", GTM_CONTAINER_ID);
+    })(window, document, "script", "dataLayer", "GTM-KPR5LSH6");
   </script>
 
   <style>
     :root {
-      --primary: #0a66c2; /* LinkedIn Blue */
-      --bg: #f3f2ef;
-      --card-bg: #ffffff;
-      --text-main: #191919;
-      --text-muted: #666666;
-      --border: #e0e0e0;
-      --accent: #057642;
-      --error: #d11124;
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --surface-2: #fbfbfe;
+      --text: #0f172a;
+      --muted: #475569;
+      --muted-2: #64748b;
+      --border: rgba(15, 23, 42, 0.10);
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --shadow-2: 0 6px 18px rgba(15, 23, 42, 0.08);
+      --accent: #0a66c2;      /* LinkedIn-ish blue */
+      --accent-2: #2f7dd1;
+      --danger: #b42318;
+      --ok: #027a48;
+      --ring: rgba(10, 102, 194, 0.22);
+      --radius: 16px;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background-color: var(--bg);
-      color: var(--text-main);
-      line-height: 1.5;
-    }
-
-    .navbar {
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border);
-      padding: 1rem 2rem;
-      margin-bottom: 2rem;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 800px at 15% 0%, rgba(10, 102, 194, 0.10), transparent 55%),
+        radial-gradient(1100px 750px at 90% 10%, rgba(2, 122, 72, 0.08), transparent 55%),
+        var(--bg);
+      line-height: 1.45;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 28px 18px 56px;
     }
 
-    .hero-section {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-
-    h1 { font-size: 1.75rem; margin-bottom: 0.5rem; color: var(--primary); }
-    .subtext { color: var(--text-muted); font-size: 1rem; }
-
-    .main-grid {
+    header {
       display: grid;
-      grid-template-columns: 1fr 400px;
-      gap: 24px;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .topRow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.6);
+      padding: 6px 10px;
+      border-radius: 999px;
+      width: fit-content;
+      color: var(--muted);
+      font-size: 13px;
+      box-shadow: var(--shadow-2);
+      backdrop-filter: blur(6px);
+    }
+
+    .badgeDot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.15);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      max-width: 78ch;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      margin-top: 18px;
       align-items: start;
     }
 
-    @media (max-width: 992px) {
-      .main-grid { grid-template-columns: 1fr; }
+    @media (max-width: 920px) {
+      .grid { grid-template-columns: 1fr; }
     }
 
     .card {
-      background: var(--card-bg);
+      background: rgba(255, 255, 255, 0.75);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 24px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
     }
 
-    .form-row {
+    .cardHeader {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    ul {
+      margin: 8px 0 0 18px;
+      color: var(--muted);
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 14px 0;
+    }
+
+    .row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 16px;
+      gap: 12px;
     }
 
-    .form-group { margin-bottom: 16px; }
-    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; color: var(--text-muted); }
-    
-    input, select {
+    @media (max-width: 520px) {
+      .row { grid-template-columns: 1fr; }
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted-2);
+      margin-bottom: 6px;
+    }
+
+    input,
+    select,
+    button,
+    textarea {
       width: 100%;
-      padding: 10px 12px;
+      border-radius: 12px;
       border: 1px solid var(--border);
-      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text);
+      padding: 10px 12px;
+      outline: none;
       font-size: 14px;
+      transition: box-shadow 140ms ease, border-color 140ms ease, transform 80ms ease;
     }
 
-    input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 1px var(--primary); }
+    input::placeholder { color: rgba(15, 23, 42, 0.35); }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(10, 102, 194, 0.55);
+      box-shadow: 0 0 0 4px var(--ring);
+    }
+
+    .field { margin-bottom: 12px; }
+
+    .error {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--danger);
+      min-height: 16px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
 
     button {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 24px;
-      font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s;
+      font-weight: 650;
+      border: 1px solid rgba(10, 102, 194, 0.40);
+      background: linear-gradient(180deg, rgba(10, 102, 194, 0.12), rgba(10, 102, 194, 0.06));
+      color: var(--text);
     }
 
-    button:hover { background: #004182; }
-    button.secondary { background: transparent; color: var(--text-muted); border: 1px solid var(--text-muted); margin-left: 8px; }
+    button:hover { border-color: rgba(10, 102, 194, 0.60); }
+    button:active { transform: translateY(1px); }
+
+    button.primary {
+      background: linear-gradient(180deg, rgba(10, 102, 194, 0.22), rgba(10, 102, 194, 0.10));
+    }
+
+    button.secondary {
+      border-color: var(--border);
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.75);
+      color: var(--muted);
+      font-size: 13px;
+      box-shadow: var(--shadow-2);
+      backdrop-filter: blur(6px);
+    }
+
+    .ok { color: var(--ok); }
+    .muted { color: var(--muted); }
+
+    .success {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(2, 122, 72, 0.25);
+      background: rgba(2, 122, 72, 0.06);
+      color: var(--text);
+      display: none;
+    }
+
+    .debug {
+      display: grid;
+      gap: 10px;
+    }
 
     pre {
-      background: #282c34;
-      color: #abb2bf;
-      padding: 16px;
-      border-radius: 6px;
-      font-size: 12px;
-      overflow-x: auto;
-      max-height: 500px;
+      margin: 0;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.8);
+      overflow: auto;
+      max-height: 360px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12.5px;
+      line-height: 1.35;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
-    .status-badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 12px;
-      background: #e1f0fe;
-      color: var(--primary);
-      margin-bottom: 1rem;
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.95em;
     }
 
-    .error-msg { color: var(--error); font-size: 12px; margin-top: 4px; height: 16px; }
+    .tiny {
+      font-size: 12px;
+      color: var(--muted-2);
+    }
+
+    a { color: var(--accent); }
+    a:hover { opacity: 0.9; }
   </style>
 
   <script>
     /**
-     * Parsing Logic for LinkedIn Click ID
+     * =========================
+     * li_fat_id capture (URL or cookie)
+     * - Priority: URL param > cookie
+     * - If found in URL, persist to cookie
+     * =========================
      */
-    function getLiFatId() {
-      // 1. Check URL params
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.has('li_fat_id')) return urlParams.get('li_fat_id');
-
-      // 2. Check cookies
-      const match = document.cookie.match(/(^| )li_fat_id=([^;]+)/);
-      if (match) return match[2];
-
-      return null;
+    function getCookie(name) {
+      try {
+        const parts = ("; " + document.cookie).split("; " + name + "=");
+        if (parts.length === 2) return parts.pop().split(";").shift() || "";
+        return "";
+      } catch (e) {
+        return "";
+      }
     }
 
-    // Intercept dataLayer.push for the Debug Panel
-    (function() {
-      const originalPush = window.dataLayer.push.bind(window.dataLayer);
-      window.dataLayer.push = function(obj) {
-        const result = originalPush(obj);
-        const debugEl = document.getElementById('debugOutput');
-        if (debugEl) {
-          debugEl.textContent = JSON.stringify(window.dataLayer, null, 2);
-        }
+    function setCookie(name, value, days) {
+      try {
+        if (!value) return;
+        const maxAge = (days || 90) * 24 * 60 * 60;
+        // Demo-friendly defaults:
+        // - path=/ so it works site-wide
+        // - SameSite=Lax so it survives standard navigations
+        // - Secure only when on https:
+        const secure = window.location.protocol === "https:" ? "; Secure" : "";
+        document.cookie = `${name}=${encodeURIComponent(value)}; Max-Age=${maxAge}; Path=/; SameSite=Lax${secure}`;
+      } catch (e) {
+        // no-op
+      }
+    }
+
+    function getLiFatIdFromUrl() {
+      try {
+        return (new URLSearchParams(window.location.search)).get("li_fat_id") || "";
+      } catch (e) {
+        return "";
+      }
+    }
+
+    function resolveLiFatId() {
+      const fromUrl = getLiFatIdFromUrl();
+      if (fromUrl) {
+        setCookie("li_fat_id", fromUrl, 90);
+        return fromUrl;
+      }
+      const fromCookie = getCookie("li_fat_id");
+      return fromCookie || "";
+    }
+
+    // Resolved once for the page (used for page_view + lead_submission)
+    window.__LI_FAT_ID__ = resolveLiFatId();
+  </script>
+
+  <script>
+    /**
+     * =========================
+     * dataLayer Initialization + Debug Panel Interceptor
+     * =========================
+     */
+    window.dataLayer = window.dataLayer || [];
+
+    (function patchDataLayerPush() {
+      const dl = window.dataLayer;
+
+      // Keep a reference to original push
+      const originalPush = dl.push.bind(dl);
+
+      // Simple helper to read last pushed object (for debug UI)
+      function safeRenderDebugPanel() {
+        try {
+          if (typeof window.renderDebugPanel === "function") {
+            window.renderDebugPanel();
+          }
+        } catch (e) { /* no-op */ }
+      }
+
+      // Patch push to intercept events and update debug panel
+      dl.push = function () {
+        const result = originalPush(...arguments);
+
+        // Detect GTM lifecycle events for page_view sequencing
+        try {
+          const lastArg = arguments && arguments.length ? arguments[arguments.length - 1] : null;
+          if (lastArg && typeof lastArg === "object" && lastArg.event === "gtm.load") {
+            window.__GTM_LOAD_SEEN__ = true;
+            if (typeof window.__firePageViewWhenReady === "function") {
+              window.__firePageViewWhenReady();
+            }
+          }
+        } catch (e) { /* no-op */ }
+
+        safeRenderDebugPanel();
         return result;
       };
-    })();
 
+      window.__originalDataLayerPush = originalPush;
+    })();
+  </script>
+
+  <script>
     /**
-     * Event Sequencing: Load gtm.js, dom, and load BEFORE page_view
+     * =========================
+     * Ensure GTM default events fire BEFORE page_view
+     *
+     * We wait for GTM to push gtm.load, then push page_view.
+     * Fallback: if gtm.load never arrives (adblock, snippet removed, etc),
+     * we push page_view after a short timeout so the demo still works.
+     * =========================
      */
-    window.addEventListener('load', function() {
-      const clickId = getLiFatId();
-      
-      window.dataLayer.push({
-        event: "page_view",
-        user_data: {
-          user_id: clickId || ""
-        },
-        page_location: window.location.href,
-        page_title: document.title
-      });
-      
-      // Update UI display
-      const displayId = document.getElementById('idDisplay');
-      if (displayId) displayId.textContent = clickId || 'Not Found';
-    });
+    (function initSequencedPageView() {
+      let fired = false;
+
+      function buildPageViewPayload() {
+        return {
+          event: "page_view",
+          page_location: window.location.href,
+          page_path: window.location.pathname,
+          page_title: document.title,
+          user_data: {
+            user_id: window.__LI_FAT_ID__ || ""
+          }
+        };
+      }
+
+      function fire() {
+        if (fired) return;
+        fired = true;
+
+        window.dataLayer.push(buildPageViewPayload());
+
+        // Update captured ID UI if present
+        try {
+          const liFatIdDisplay = document.getElementById("liFatIdDisplay");
+          if (liFatIdDisplay) liFatIdDisplay.textContent = (window.__LI_FAT_ID__ || "(none)");
+        } catch (e) { /* no-op */ }
+      }
+
+      // Expose for the patched push to call when gtm.load is seen
+      window.__firePageViewWhenReady = function () {
+        // If GTM load has occurred, fire immediately.
+        if (window.__GTM_LOAD_SEEN__) fire();
+      };
+
+      // Fallback timer in case gtm.load never appears
+      window.setTimeout(function () {
+        if (!fired) fire();
+      }, 1500);
+    })();
   </script>
 </head>
 
 <body>
-  <nav class="navbar">
-    <div class="container">
-      <strong>LinkedIn CAPI Implementation Tester</strong>
-    </div>
-  </nav>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KPR5LSH6" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe>
+  </noscript>
 
   <div class="container">
-    <header class="hero-section">
-      <span class="status-badge">Container ID: GTM-KPR5LSH6</span>
-      <h1>Lead Capture & CAPI Validation</h1>
-      <p class="subtext">Simulate lead generation events to validate GTM Server-Side and LinkedIn CAPI mapping.</p>
+    <header>
+      <div class="topRow">
+        <div class="badge">
+          <span class="badgeDot" aria-hidden="true"></span>
+          <span>Lead Demo</span>
+          <span class="tiny">LinkedIn CAPI Tag + GTM Server-Side</span>
+        </div>
+        <div class="pill">
+          Captured <code>li_fat_id</code>:
+          <strong id="liFatIdDisplay" class="ok">(loading)</strong>
+        </div>
+      </div>
+
+      <h1>LinkedIn CAPI Lead Form Demo via GTM Web + Server</h1>
+      <p class="sub">
+        Use this page to demo a clean <code>dataLayer</code> implementation for lead capture, how a <strong>GA4 client</strong>
+        receives events and <code>user_data</code>, and how the <strong>LinkedIn CAPI Tag</strong> can consume it in GTM Server-Side.
+      </p>
     </header>
 
-    <div class="main-grid">
-      <section class="card">
-        <h2 style="margin-top:0">Register Interest</h2>
-        <form id="leadForm">
-          <div class="form-row">
-            <div class="form-group">
-              <label>First Name</label>
-              <input type="text" id="fname" required placeholder="Jane">
+    <div class="grid">
+      <!-- LEFT: Form -->
+      <section class="card" aria-labelledby="leadFormTitle">
+        <div class="cardHeader">
+          <h2 id="leadFormTitle">Lead Form</h2>
+          <div class="actions" style="margin:0;">
+            <button type="button" class="secondary" id="copySampleUrlBtn">Copy sample URL</button>
+          </div>
+        </div>
+
+        <p class="note">
+          On submit, this page pushes a <code>lead_submission</code> event to <code>dataLayer</code> with a
+          <code>user_data</code> object. Use GTM Preview mode (Web + Server) to verify the payload.
+        </p>
+
+        <div class="divider"></div>
+
+        <form id="leadForm" novalidate>
+          <div class="row">
+            <div class="field">
+              <label for="first_name">First name</label>
+              <input id="first_name" name="first_name" type="text" placeholder="Jane" autocomplete="given-name" required />
+              <div class="error" id="err_first_name"></div>
             </div>
-            <div class="form-group">
-              <label>Last Name</label>
-              <input type="text" id="lname" required placeholder="Doe">
+
+            <div class="field">
+              <label for="last_name">Last name</label>
+              <input id="last_name" name="last_name" type="text" placeholder="Doe" autocomplete="family-name" required />
+              <div class="error" id="err_last_name"></div>
             </div>
           </div>
-          <div class="form-group">
-            <label>Work Email</label>
-            <input type="email" id="email" required placeholder="jane@company.com">
+
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" placeholder="jane.doe@company.com" autocomplete="email" required />
+            <div class="error" id="err_email"></div>
           </div>
-          <div class="form-group">
-            <label>Country</label>
-            <select id="country">
-              <option value="US">United States</option>
-              <option value="GB">United Kingdom</option>
-              <option value="CA">Canada</option>
+
+          <div class="row">
+            <div class="field">
+              <label for="company_name">Company name</label>
+              <input id="company_name" name="company_name" type="text" placeholder="Acme Inc." autocomplete="organization" required />
+              <div class="error" id="err_company_name"></div>
+            </div>
+
+            <div class="field">
+              <label for="job_title">Job title</label>
+              <input id="job_title" name="job_title" type="text" placeholder="Marketing Manager" autocomplete="organization-title" required />
+              <div class="error" id="err_job_title"></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="country">Country (ISO 2-letter code)</label>
+            <select id="country" name="country" required>
+              <option value="" selected disabled>Select a country</option>
+              <option value="US">United States (US)</option>
+              <option value="CA">Canada (CA)</option>
+              <option value="GB">United Kingdom (GB)</option>
+              <option value="AU">Australia (AU)</option>
+              <option value="DE">Germany (DE)</option>
+              <option value="FR">France (FR)</option>
+              <option value="IN">India (IN)</option>
+              <option value="JP">Japan (JP)</option>
+              <option value="SG">Singapore (SG)</option>
+              <option value="BR">Brazil (BR)</option>
             </select>
+            <div class="error" id="err_country"></div>
+            <div class="tiny">Tip: keep the dropdown short for MVP; expand later if needed.</div>
           </div>
-          <button type="submit">Submit Lead</button>
-          <p id="successMsg" style="display:none; color: var(--accent); font-weight:600; margin-top:1rem;">Event pushed to dataLayer!</p>
+
+          <div class="actions">
+            <button type="submit" class="primary">Submit lead</button>
+            <button type="button" class="secondary" id="resetBtn">Reset</button>
+          </div>
+
+          <div class="success" id="successBox" role="status" aria-live="polite">
+            <strong class="ok">Success.</strong>
+            <span class="muted">Pushed <code>lead_submission</code> to <code>dataLayer</code>. Check the Debug Panel and GTM Preview.</span>
+          </div>
         </form>
-        <hr style="border:0; border-top:1px solid var(--border); margin: 2rem 0;">
-        <p style="font-size:13px; color: var(--text-muted)">
-          Captured li_fat_id: <strong id="idDisplay" style="color: var(--primary)">-</strong>
+
+        <p class="tiny" style="margin-top:12px;">
+          Demo tip: open this page with <code>?li_fat_id=TEST123</code>, then submit the form.
+          The value will be included as <code>user_data.user_id</code> on <code>page_view</code> and <code>lead_submission</code>.
         </p>
       </section>
 
-      <aside>
-        <div class="card" style="background: #1c1f26;">
-          <h3 style="color: white; margin-top:0; font-size: 1rem;">DataLayer Activity</h3>
-          <pre id="debugOutput">[]</pre>
+      <!-- RIGHT: Debug + Notes -->
+      <aside class="card debug" aria-labelledby="debugTitle">
+        <div class="cardHeader" style="margin-bottom:6px;">
+          <h2 id="debugTitle">Debug Panel</h2>
+          <div class="actions" style="margin:0;">
+            <button type="button" class="secondary" id="copyJsonBtn">Copy JSON</button>
+            <button type="button" class="secondary" id="clearDebugBtn">Clear</button>
+          </div>
         </div>
+
+        <p class="note">
+          Shows the <strong>latest</strong> object pushed to <code>dataLayer</code>. It updates automatically when
+          <code>page_view</code> fires (after <code>gtm.load</code>) and when the form pushes <code>lead_submission</code>.
+        </p>
+
+        <div class="divider"></div>
+        <pre id="debugPre">{}</pre>
+
+        <div class="divider"></div>
+
+        <h2 style="margin:0;">Demo Notes</h2>
+        <ul>
+          <li>Append <code>?li_fat_id=TEST123</code> to the URL (or use the button).</li>
+          <li>Open GTM Preview mode (Web container + Server container).</li>
+          <li>Confirm <code>page_view</code> fires after <code>gtm.load</code>, and <code>lead_submission</code> on submit.</li>
+          <li>In Server-Side, verify the GA4 client receives <code>user_data</code>, then confirm the LinkedIn CAPI tag uses it.</li>
+        </ul>
+
+        <p class="tiny" style="margin:0;">
+          This page stores <code>li_fat_id</code> in a cookie (90 days) when present in the URL, then reuses it on future visits.
+        </p>
       </aside>
     </div>
   </div>
 
   <script>
-    // Handle Form Submission
-    document.getElementById('leadForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const payload = {
-        event: 'lead_submission',
-        user_data: {
-          email: document.getElementById('email').value,
-          address: {
-            first_name: document.getElementById('fname').value,
-            last_name: document.getElementById('lname').value,
-            country: document.getElementById('country').value
-          },
-          user_id: getLiFatId() || ""
+    /**
+     * =========================
+     * Debug Panel Renderer (called by patched dataLayer.push)
+     * =========================
+     */
+    (function initDebugPanel() {
+      const debugPre = document.getElementById("debugPre");
+      const copyJsonBtn = document.getElementById("copyJsonBtn");
+      const clearDebugBtn = document.getElementById("clearDebugBtn");
+
+      function getDataLayerSnapshot() {
+        try {
+          return Array.from(window.dataLayer || []);
+        } catch (e) {
+          return [];
         }
+      }
+
+      window.renderDebugPanel = function () {
+        const snapshot = getDataLayerSnapshot();
+        debugPre.textContent = JSON.stringify(snapshot, null, 2);
       };
 
-      window.dataLayer.push(payload);
-      document.getElementById('successMsg').style.display = 'block';
-      setTimeout(() => { document.getElementById('successMsg').style.display = 'none'; }, 3000);
-    });
+      // Initial render
+      window.renderDebugPanel();
+
+      copyJsonBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(debugPre.textContent || "[]");
+          copyJsonBtn.textContent = "Copied";
+          setTimeout(() => (copyJsonBtn.textContent = "Copy JSON"), 900);
+        } catch (e) {
+          alert("Clipboard copy failed. You can manually select and copy the JSON.");
+        }
+      });
+
+      clearDebugBtn.addEventListener("click", () => {
+        debugPre.textContent = "[]"; // UI only; does NOT modify dataLayer history
+      });
+    })();
+  </script>
+
+  <script>
+    /**
+     * =========================
+     * Copy sample URL button
+     * =========================
+     */
+    (function initSampleUrlBtn() {
+      const copySampleUrlBtn = document.getElementById("copySampleUrlBtn");
+
+      copySampleUrlBtn.addEventListener("click", async () => {
+        const base = window.location.origin + window.location.pathname;
+        const sampleUrl = base + "?li_fat_id=TEST123";
+        try {
+          await navigator.clipboard.writeText(sampleUrl);
+          copySampleUrlBtn.textContent = "Copied";
+          setTimeout(() => (copySampleUrlBtn.textContent = "Copy sample URL"), 900);
+        } catch (e) {
+          alert("Clipboard copy failed. Here is the sample URL:\n\n" + sampleUrl);
+        }
+      });
+    })();
+  </script>
+
+  <script>
+    /**
+     * =========================
+     * Lead Form Submission
+     * Validates input, then pushes lead_submission to dataLayer.
+     * Payload uses Google Common Event schema style user_data.
+     * =========================
+     */
+    (function initLeadForm() {
+      const userId = window.__LI_FAT_ID__ || "";
+
+      const form = document.getElementById("leadForm");
+      const successBox = document.getElementById("successBox");
+      const resetBtn = document.getElementById("resetBtn");
+
+      const fields = {
+        first_name: document.getElementById("first_name"),
+        last_name: document.getElementById("last_name"),
+        email: document.getElementById("email"),
+        company_name: document.getElementById("company_name"),
+        job_title: document.getElementById("job_title"),
+        country: document.getElementById("country")
+      };
+
+      const errors = {
+        first_name: document.getElementById("err_first_name"),
+        last_name: document.getElementById("err_last_name"),
+        email: document.getElementById("err_email"),
+        company_name: document.getElementById("err_company_name"),
+        job_title: document.getElementById("err_job_title"),
+        country: document.getElementById("err_country")
+      };
+
+      function setError(name, msg) { errors[name].textContent = msg || ""; }
+      function isBlank(v) { return !v || !String(v).trim(); }
+      function isValidEmail(v) {
+        const s = String(v || "").trim();
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+      }
+
+      function validate() {
+        let ok = true;
+
+        const first = fields.first_name.value.trim();
+        const last = fields.last_name.value.trim();
+        const email = fields.email.value.trim();
+        const company = fields.company_name.value.trim();
+        const title = fields.job_title.value.trim();
+        const country = fields.country.value;
+
+        Object.keys(errors).forEach(k => setError(k, ""));
+
+        if (isBlank(first)) { setError("first_name", "Please enter a first name."); ok = false; }
+        if (isBlank(last)) { setError("last_name", "Please enter a last name."); ok = false; }
+
+        if (isBlank(email)) {
+          setError("email", "Please enter an email address.");
+          ok = false;
+        } else if (!isValidEmail(email)) {
+          setError("email", "Please enter a valid email address.");
+          ok = false;
+        }
+
+        if (isBlank(company)) { setError("company_name", "Please enter a company name."); ok = false; }
+        if (isBlank(title)) { setError("job_title", "Please enter a job title."); ok = false; }
+        if (isBlank(country)) { setError("country", "Please select a country."); ok = false; }
+
+        return ok;
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        successBox.style.display = "none";
+
+        if (!validate()) return;
+
+        const payload = {
+          event: "lead_submission",
+          user_data: {
+            email: fields.email.value.trim(),
+            user_id: userId,
+            address: {
+              first_name: fields.first_name.value.trim(),
+              last_name: fields.last_name.value.trim(),
+              country: fields.country.value
+            },
+            company_name: fields.company_name.value.trim(),
+            job_title: fields.job_title.value.trim()
+          }
+        };
+
+        window.dataLayer.push(payload);
+
+        successBox.style.display = "block";
+        console.log("dataLayer push:", payload);
+      });
+
+      resetBtn.addEventListener("click", () => {
+        form.reset();
+        successBox.style.display = "none";
+        Object.keys(errors).forEach(k => setError(k, ""));
+      });
+    })();
   </script>
 </body>
+
 </html>
