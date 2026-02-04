@@ -407,55 +407,61 @@
   </script>
 
   <script>
-    /**
-     * =========================
-     * Ensure GTM default events fire BEFORE page_view
-     *
-     * We wait for GTM to push gtm.load, then push page_view.
-     * Fallback: if gtm.load never arrives (adblock, snippet removed, etc),
-     * we push page_view after a short timeout so the demo still works.
-     * =========================
-     */
-    (function initSequencedPageView() {
-      let fired = false;
+  /**
+   * =========================
+   * Ensure GTM default events fire BEFORE page_view
+   *
+   * Primary: wait for GTM to push gtm.load, then push page_view.
+   * Fallback: if gtm.load never arrives (adblock, snippet removed, etc),
+   *           push page_view after the browser window 'load' event.
+   * =========================
+   */
+  (function initSequencedPageView() {
+    let fired = false;
 
-      function buildPageViewPayload() {
-        return {
-          event: "page_view",
-          page_location: window.location.href,
-          page_path: window.location.pathname,
-          page_title: document.title,
-          user_data: {
-            user_id: window.__LI_FAT_ID__ || ""
-          }
-        };
-      }
-
-      function fire() {
-        if (fired) return;
-        fired = true;
-
-        window.dataLayer.push(buildPageViewPayload());
-
-        // Update captured ID UI if present
-        try {
-          const liFatIdDisplay = document.getElementById("liFatIdDisplay");
-          if (liFatIdDisplay) liFatIdDisplay.textContent = (window.__LI_FAT_ID__ || "(none)");
-        } catch (e) { /* no-op */ }
-      }
-
-      // Expose for the patched push to call when gtm.load is seen
-      window.__firePageViewWhenReady = function () {
-        // If GTM load has occurred, fire immediately.
-        if (window.__GTM_LOAD_SEEN__) fire();
+    function buildPageViewPayload() {
+      return {
+        event: "page_view",
+        page_location: window.location.href,
+        page_path: window.location.pathname,
+        page_title: document.title,
+        user_data: {
+          user_id: window.__LI_FAT_ID__ || ""
+        }
       };
+    }
 
-      // Fallback timer in case gtm.load never appears
+    function fire() {
+      if (fired) return;
+      fired = true;
+
+      window.dataLayer.push(buildPageViewPayload());
+
+      // Update captured ID UI if present
+      try {
+        const liFatIdDisplay = document.getElementById("liFatIdDisplay");
+        if (liFatIdDisplay) liFatIdDisplay.textContent = (window.__LI_FAT_ID__ || "(none)");
+      } catch (e) { /* no-op */ }
+    }
+
+    // Expose for the patched dataLayer.push to call when gtm.load is seen
+    window.__firePageViewWhenReady = function () {
+      if (window.__GTM_LOAD_SEEN__) fire();
+    };
+
+    // Fallback: wait for browser window load, then give GTM a beat to push gtm.load
+    window.addEventListener("load", function () {
+      // Let GTM's own gtm.load push happen first on the same load event
       window.setTimeout(function () {
-        if (!fired) fire();
-      }, 1500);
-    })();
-  </script>
+        if (!fired) {
+          // If GTM worked, gtm.load should have been seen already and fired would be true.
+          // If GTM didn't work (blocked), we still fire after window load so the demo runs.
+          fire();
+        }
+      }, 50);
+    });
+  })();
+</script>
 </head>
 
 <body>
