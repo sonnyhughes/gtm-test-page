@@ -449,63 +449,79 @@
   </script>
 
   <script>
-    /**
-     * =========================
-     * Ensure GTM default events fire BEFORE page_view
-     *
-     * Primary: wait for GTM to push gtm.load, then push page_view.
-     * Fallback: if gtm.load never arrives (adblock, snippet removed, etc),
-     *           push page_view after the browser window 'load' event.
-     * =========================
-     */
-    (function initSequencedPageView() {
-      let fired = false;
+  /**
+   * =========================
+   * Ensure GTM default events fire BEFORE page_view
+   *
+   * Primary: wait for GTM to push gtm.load, then push page_view.
+   * Fallback: after window load, poll for gtm.load for a grace window.
+   *           If never seen (adblock, missing snippet), fire after grace window.
+   * =========================
+   */
+  (function initSequencedPageView() {
+    let fired = false;
 
-      function buildPageViewPayload() {
-        const eid = generateEventId();
-        const eventTime = Date.now(); // 13-digit epoch milliseconds
+    function buildPageViewPayload() {
+      const eid = generateEventId();
+      const eventTime = Date.now(); // 13-digit epoch milliseconds
 
-        return {
-          event: "page_view",
-          event_id: eid,
-          event_time: eventTime,
-          page_location: window.location.href,
-          page_path: window.location.pathname,
-          page_title: document.title,
-          user_data: {
-            user_id: window.__LI_FAT_ID__ || "",
-            event_id: eid
-          }
-        };
-      }
-
-      function fire() {
-        if (fired) return;
-        fired = true;
-
-        window.dataLayer.push(buildPageViewPayload());
-
-        // Update captured ID UI if present
-        try {
-          const liFatIdDisplay = document.getElementById("liFatIdDisplay");
-          if (liFatIdDisplay) liFatIdDisplay.textContent = (window.__LI_FAT_ID__ || "(none)");
-        } catch (e) { /* no-op */ }
-      }
-
-      // Expose for the patched dataLayer.push to call when gtm.load is seen
-      window.__firePageViewWhenReady = function () {
-        if (window.__GTM_LOAD_SEEN__) fire();
+      return {
+        event: "page_view",
+        event_id: eid,
+        event_time: eventTime,
+        event_time_iso: new Date(eventTime).toISOString(),
+        page_location: window.location.href,
+        page_path: window.location.pathname,
+        page_title: document.title,
+        user_data: {
+          user_id: window.__LI_FAT_ID__ || "",
+          event_id: eid
+        }
       };
+    }
 
-      // Fallback: wait for browser window load, then give GTM a beat to push gtm.load
-      window.addEventListener("load", function () {
-        // Let GTM's own gtm.load push happen first on the same load event
-        window.setTimeout(function () {
-          if (!fired) fire();
-        }, 50);
-      });
-    })();
-  </script>
+    function fire() {
+      if (fired) return;
+      fired = true;
+
+      window.dataLayer.push(buildPageViewPayload());
+
+      // Update captured ID UI if present
+      try {
+        const liFatIdDisplay = document.getElementById("liFatIdDisplay");
+        if (liFatIdDisplay) liFatIdDisplay.textContent = (window.__LI_FAT_ID__ || "(none)");
+      } catch (e) { /* no-op */ }
+    }
+
+    // Called when our patched dataLayer.push observes gtm.load
+    window.__firePageViewWhenReady = function () {
+      if (window.__GTM_LOAD_SEEN__) fire();
+    };
+
+    // Fallback: after window load, WAIT for GTM's gtm.load to arrive (Preview mode can be slow)
+    window.addEventListener("load", function () {
+      const start = Date.now();
+      const MAX_WAIT_MS = 4000;   // grace window for GTM Preview slowness
+      const POLL_MS = 50;
+
+      const timer = window.setInterval(function () {
+        // If GTM has pushed gtm.load, fire immediately (correct ordering)
+        if (window.__GTM_LOAD_SEEN__) {
+          window.clearInterval(timer);
+          fire();
+          return;
+        }
+
+        // If GTM never arrives (blocked/missing), fire after grace window
+        if (Date.now() - start >= MAX_WAIT_MS) {
+          window.clearInterval(timer);
+          fire();
+        }
+      }, POLL_MS);
+    });
+  })();
+</script>
+
 </head>
 
 <body>
