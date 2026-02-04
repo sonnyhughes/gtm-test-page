@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -39,7 +38,7 @@
       --border: rgba(15, 23, 42, 0.10);
       --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
       --shadow-2: 0 6px 18px rgba(15, 23, 42, 0.08);
-      --accent: #0a66c2;      /* LinkedIn-ish blue */
+      --accent: #0a66c2; /* LinkedIn-ish blue */
       --accent-2: #2f7dd1;
       --danger: #b42318;
       --ok: #027a48;
@@ -407,61 +406,106 @@
   </script>
 
   <script>
-  /**
-   * =========================
-   * Ensure GTM default events fire BEFORE page_view
-   *
-   * Primary: wait for GTM to push gtm.load, then push page_view.
-   * Fallback: if gtm.load never arrives (adblock, snippet removed, etc),
-   *           push page_view after the browser window 'load' event.
-   * =========================
-   */
-  (function initSequencedPageView() {
-    let fired = false;
-
-    function buildPageViewPayload() {
-      return {
-        event: "page_view",
-        page_location: window.location.href,
-        page_path: window.location.pathname,
-        page_title: document.title,
-        user_data: {
-          user_id: window.__LI_FAT_ID__ || ""
-        }
-      };
-    }
-
-    function fire() {
-      if (fired) return;
-      fired = true;
-
-      window.dataLayer.push(buildPageViewPayload());
-
-      // Update captured ID UI if present
+    /**
+     * =========================
+     * Event ID (UUID) helper
+     * - One UUID per event pushed to dataLayer
+     * - Uses crypto.randomUUID when available
+     * - Falls back to RFC4122-ish v4 generator for older browsers
+     * =========================
+     */
+    function generateEventId() {
       try {
-        const liFatIdDisplay = document.getElementById("liFatIdDisplay");
-        if (liFatIdDisplay) liFatIdDisplay.textContent = (window.__LI_FAT_ID__ || "(none)");
-      } catch (e) { /* no-op */ }
-    }
-
-    // Expose for the patched dataLayer.push to call when gtm.load is seen
-    window.__firePageViewWhenReady = function () {
-      if (window.__GTM_LOAD_SEEN__) fire();
-    };
-
-    // Fallback: wait for browser window load, then give GTM a beat to push gtm.load
-    window.addEventListener("load", function () {
-      // Let GTM's own gtm.load push happen first on the same load event
-      window.setTimeout(function () {
-        if (!fired) {
-          // If GTM worked, gtm.load should have been seen already and fired would be true.
-          // If GTM didn't work (blocked), we still fire after window load so the demo runs.
-          fire();
+        if (window.crypto && typeof window.crypto.randomUUID === "function") {
+          return window.crypto.randomUUID();
         }
-      }, 50);
-    });
-  })();
-</script>
+      } catch (e) { /* no-op */ }
+
+      // Fallback UUID v4 generator
+      try {
+        const cryptoObj = window.crypto || window.msCrypto;
+        if (cryptoObj && cryptoObj.getRandomValues) {
+          const buf = new Uint8Array(16);
+          cryptoObj.getRandomValues(buf);
+
+          // Per RFC4122 v4
+          buf[6] = (buf[6] & 0x0f) | 0x40;
+          buf[8] = (buf[8] & 0x3f) | 0x80;
+
+          const hex = Array.from(buf).map(b => b.toString(16).padStart(2, "0")).join("");
+          return (
+            hex.slice(0, 8) + "-" +
+            hex.slice(8, 12) + "-" +
+            hex.slice(12, 16) + "-" +
+            hex.slice(16, 20) + "-" +
+            hex.slice(20)
+          );
+        }
+      } catch (e) { /* no-op */ }
+
+      // Last resort (still unique-ish): timestamp + random
+      return "evt_" + Date.now() + "_" + Math.random().toString(16).slice(2);
+    }
+  </script>
+
+  <script>
+    /**
+     * =========================
+     * Ensure GTM default events fire BEFORE page_view
+     *
+     * Primary: wait for GTM to push gtm.load, then push page_view.
+     * Fallback: if gtm.load never arrives (adblock, snippet removed, etc),
+     *           push page_view after the browser window 'load' event.
+     * =========================
+     */
+    (function initSequencedPageView() {
+      let fired = false;
+
+      function buildPageViewPayload() {
+        const eid = generateEventId();
+        const eventTime = Math.floor(Date.now() / 1000);
+
+        return {
+          event: "page_view",
+          event_id: eid,
+          event_time: eventTime,
+          page_location: window.location.href,
+          page_path: window.location.pathname,
+          page_title: document.title,
+          user_data: {
+            user_id: window.__LI_FAT_ID__ || "",
+            event_id: eid
+          }
+        };
+      }
+
+      function fire() {
+        if (fired) return;
+        fired = true;
+
+        window.dataLayer.push(buildPageViewPayload());
+
+        // Update captured ID UI if present
+        try {
+          const liFatIdDisplay = document.getElementById("liFatIdDisplay");
+          if (liFatIdDisplay) liFatIdDisplay.textContent = (window.__LI_FAT_ID__ || "(none)");
+        } catch (e) { /* no-op */ }
+      }
+
+      // Expose for the patched dataLayer.push to call when gtm.load is seen
+      window.__firePageViewWhenReady = function () {
+        if (window.__GTM_LOAD_SEEN__) fire();
+      };
+
+      // Fallback: wait for browser window load, then give GTM a beat to push gtm.load
+      window.addEventListener("load", function () {
+        // Let GTM's own gtm.load push happen first on the same load event
+        window.setTimeout(function () {
+          if (!fired) fire();
+        }, 50);
+      });
+    })();
+  </script>
 </head>
 
 <body>
@@ -757,9 +801,15 @@
 
         if (!validate()) return;
 
+        const eid = generateEventId();
+        const eventTime = Math.floor(Date.now() / 1000);
+
         const payload = {
           event: "lead_submission",
+          event_id: eid,
+          event_time: eventTime,
           user_data: {
+            event_id: eid,
             email: fields.email.value.trim(),
             user_id: userId,
             address: {
@@ -786,5 +836,4 @@
     })();
   </script>
 </body>
-
 </html>
