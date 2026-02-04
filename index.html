@@ -463,7 +463,7 @@
 
       function buildPageViewPayload() {
         const eid = generateEventId();
-        const eventTime = Math.floor(Date.now() / 1000);
+        const eventTime = Date.now(); // 13-digit epoch milliseconds
 
         return {
           event: "page_view",
@@ -802,7 +802,7 @@
         if (!validate()) return;
 
         const eid = generateEventId();
-        const eventTime = Math.floor(Date.now() / 1000);
+        const eventTime = Date.now(); // 13-digit epoch milliseconds
 
         const payload = {
           event: "lead_submission",
