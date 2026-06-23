@@ -7,24 +7,54 @@
 
   <!-- =========================
        Google Tag Manager (GTM)
-       Replace GTM-XXXXXXX with your Web GTM Container ID.
+       Training version: loads all Web GTM containers listed below.
+
+       To add more containers later, add the Web GTM Container ID to
+       GTM_CONTAINER_IDS. Duplicate IDs are automatically ignored.
        ========================= -->
   <script>
-    // GTM_CONTAINER_ID is for human readability only.
-    // The GTM snippet below still contains the placeholder string you must replace.
-    const GTM_CONTAINER_ID = "GTM-KPR5LSH6";
+    window.GTM_CONTAINER_IDS = [
+      "GTM-KPR5LSH6",
+      "GTM-N2PCMDJZ",
+      "GTM-N2PCMDJZ",
+      "GTM-5MG42RK4",
+      "GTM-M5TNDTH8",
+      "GTM-MHWXNFH4",
+      "GTM-T89FRV3M",
+      "GTM-5W777G9P",
+      "GTM-KKSBCBWK",
+      "GTM-NMHTJSWX",
+      "GTM-WHC52NC5",
+      "GTM-PVHNHJR4",
+      "GTM-N2PCMDJZ",
+      "GTM-TN8WGQHP",
+      "GTM-WNVX2DTJ",
+    ]
+      .filter(Boolean)
+      .map(function (id) { return String(id).trim(); })
+      .filter(function (id, index, arr) { return id && arr.indexOf(id) === index; });
   </script>
   <script>
-    (function (w, d, s, l, i) {
+    (function (w, d, s, l, ids) {
       w[l] = w[l] || [];
-      w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-      var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s),
-        dl = l != "dataLayer" ? "&l=" + l : "";
-      j.async = true;
-      j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-      f.parentNode.insertBefore(j, f);
-    })(window, document, "script", "dataLayer", "GTM-KPR5LSH6");
+
+      ids.forEach(function (i) {
+        w[l].push({
+          "gtm.start": new Date().getTime(),
+          event: "gtm.js",
+          gtm_container_id: i
+        });
+
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + encodeURIComponent(i) + dl;
+        j.setAttribute("data-gtm-container-id", i);
+        f.parentNode.insertBefore(j, f);
+      });
+    })(window, document, "script", "dataLayer", window.GTM_CONTAINER_IDS || []);
   </script>
 
   <style>
@@ -257,6 +287,31 @@
       backdrop-filter: blur(6px);
     }
 
+    .containerList {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .containerChip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--muted);
+      font-size: 12px;
+      box-shadow: var(--shadow-2);
+    }
+
+    .containerChip strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
     .ok { color: var(--ok); }
     .muted { color: var(--muted); }
 
@@ -469,13 +524,12 @@
         event: "page_view",
         event_id: eid,
         event_time: eventTime,
+        value: 0,
+        currency: "USD",
+        user_id: window.__LI_FAT_ID__ || "",
         page_location: window.location.href,
         page_path: window.location.pathname,
-        page_title: document.title,
-        user_data: {
-          user_id: window.__LI_FAT_ID__ || "",
-          event_id: eid
-        }
+        page_title: document.title
       };
     }
 
@@ -526,8 +580,19 @@
 <body>
   <!-- Google Tag Manager (noscript) -->
   <noscript>
-    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KPR5LSH6" height="0" width="0"
-      style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KPR5LSH6" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N2PCMDJZ" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5MG42RK4" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M5TNDTH8" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MHWXNFH4" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T89FRV3M" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5W777G9P" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KKSBCBWK" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMHTJSWX" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WHC52NC5" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PVHNHJR4" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TN8WGQHP" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WNVX2DTJ" height="0" width="0" style="display:none;visibility:hidden"></iframe>
   </noscript>
 
   <div class="container">
@@ -547,8 +612,13 @@
       <h1>LinkedIn CAPI Lead Form Demo via GTM Web + Server</h1>
       <p class="sub">
         Use this page to demo a clean <code>dataLayer</code> implementation for lead capture, how a <strong>GA4 client</strong>
-        receives events and <code>user_data</code>, and how the <strong>LinkedIn CAPI Tag</strong> can consume it in GTM Server-Side.
+        receives events, top-level <code>user_id</code>, and <code>user_data</code>, and how the <strong>LinkedIn CAPI Tag</strong> can consume them in GTM Server-Side.
       </p>
+      <p class="sub">
+        Training build: this page loads the Web GTM containers listed below.
+        Add new containers in <code>GTM_CONTAINER_IDS</code> near the top of this file.
+      </p>
+      <div class="containerList" id="gtmContainerList" aria-label="Loaded GTM containers"></div>
     </header>
 
     <div class="grid">
@@ -562,8 +632,8 @@
         </div>
 
         <p class="note">
-          On submit, this page pushes a <code>lead_submission</code> event to <code>dataLayer</code> with a
-          <code>user_data</code> object. Use GTM Preview mode (Web + Server) to verify the payload.
+          On submit, this page pushes a <code>lead_submission</code> event to <code>dataLayer</code> with
+          <code>user_data</code>, <code>value</code>, and <code>currency</code>. Use GTM Preview mode (Web + Server) to verify the payload.
         </p>
 
         <div class="divider"></div>
@@ -622,6 +692,31 @@
             <div class="tiny">Tip: keep the dropdown short for MVP; expand later if needed.</div>
           </div>
 
+          <div class="row">
+            <div class="field">
+              <label for="value">Conversion value</label>
+              <input id="value" name="value" type="number" min="0" step="0.01" value="250" placeholder="250.00" inputmode="decimal" required />
+              <div class="error" id="err_value"></div>
+              <div class="tiny">Demo value sent to <code>value</code>.</div>
+            </div>
+
+            <div class="field">
+              <label for="currency">Conversion currency</label>
+              <select id="currency" name="currency" required>
+                <option value="USD" selected>US Dollar (USD)</option>
+                <option value="CAD">Canadian Dollar (CAD)</option>
+                <option value="GBP">British Pound (GBP)</option>
+                <option value="EUR">Euro (EUR)</option>
+                <option value="AUD">Australian Dollar (AUD)</option>
+                <option value="JPY">Japanese Yen (JPY)</option>
+                <option value="SGD">Singapore Dollar (SGD)</option>
+                <option value="BRL">Brazilian Real (BRL)</option>
+              </select>
+              <div class="error" id="err_currency"></div>
+              <div class="tiny">Demo currency sent to <code>currency</code>.</div>
+            </div>
+          </div>
+
           <div class="actions">
             <button type="submit" class="primary">Submit lead</button>
             <button type="button" class="secondary" id="resetBtn">Reset</button>
@@ -635,7 +730,7 @@
 
         <p class="tiny" style="margin-top:12px;">
           Demo tip: open this page with <code>?li_fat_id=TEST123</code>, then submit the form.
-          The value will be included as <code>user_data.user_id</code> on <code>page_view</code> and <code>lead_submission</code>.
+          The value will be included as top-level <code>user_id</code> on <code>page_view</code> and <code>lead_submission</code>.
         </p>
       </section>
 
@@ -662,8 +757,9 @@
         <h2 style="margin:0;">Demo Notes</h2>
         <ul>
           <li>Append <code>?li_fat_id=TEST123</code> to the URL (or use the button).</li>
-          <li>Open GTM Preview mode (Web container + Server container).</li>
+          <li>Open GTM Preview mode for the container you want to test, then connect this URL.</li>
           <li>Confirm <code>page_view</code> fires after <code>gtm.load</code>, and <code>lead_submission</code> on submit.</li>
+          <li>Map <code>value</code> and <code>currency</code> in GTM/sGTM if testing dynamic values.</li>
           <li>In Server-Side, verify the GA4 client receives <code>user_data</code>, then confirm the LinkedIn CAPI tag uses it.</li>
         </ul>
 
@@ -673,6 +769,23 @@
       </aside>
     </div>
   </div>
+
+  <script>
+    /**
+     * =========================
+     * Render loaded GTM containers
+     * =========================
+     */
+    (function renderGtmContainerList() {
+      const holder = document.getElementById("gtmContainerList");
+      if (!holder) return;
+
+      const ids = window.GTM_CONTAINER_IDS || [];
+      holder.innerHTML = ids.map(function (id) {
+        return `<span class="containerChip"><strong>${id}</strong></span>`;
+      }).join("");
+    })();
+  </script>
 
   <script>
     /**
@@ -745,7 +858,7 @@
      * =========================
      * Lead Form Submission
      * Validates input, then pushes lead_submission to dataLayer.
-     * Payload uses Google Common Event schema style user_data.
+     * Payload uses Google Common Event Data style field placement.
      * =========================
      */
     (function initLeadForm() {
@@ -761,7 +874,9 @@
         email: document.getElementById("email"),
         company_name: document.getElementById("company_name"),
         job_title: document.getElementById("job_title"),
-        country: document.getElementById("country")
+        country: document.getElementById("country"),
+        value: document.getElementById("value"),
+        currency: document.getElementById("currency")
       };
 
       const errors = {
@@ -770,7 +885,9 @@
         email: document.getElementById("err_email"),
         company_name: document.getElementById("err_company_name"),
         job_title: document.getElementById("err_job_title"),
-        country: document.getElementById("err_country")
+        country: document.getElementById("err_country"),
+        value: document.getElementById("err_value"),
+        currency: document.getElementById("err_currency")
       };
 
       function setError(name, msg) { errors[name].textContent = msg || ""; }
@@ -789,6 +906,9 @@
         const company = fields.company_name.value.trim();
         const title = fields.job_title.value.trim();
         const country = fields.country.value;
+        const valueRaw = fields.value.value;
+        const conversionValue = Number(valueRaw);
+        const currency = fields.currency.value;
 
         Object.keys(errors).forEach(k => setError(k, ""));
 
@@ -806,6 +926,14 @@
         if (isBlank(company)) { setError("company_name", "Please enter a company name."); ok = false; }
         if (isBlank(title)) { setError("job_title", "Please enter a job title."); ok = false; }
         if (isBlank(country)) { setError("country", "Please select a country."); ok = false; }
+        if (isBlank(valueRaw)) {
+          setError("value", "Please enter a conversion value.");
+          ok = false;
+        } else if (!Number.isFinite(conversionValue) || conversionValue < 0) {
+          setError("value", "Please enter a valid value of 0 or greater.");
+          ok = false;
+        }
+        if (isBlank(currency)) { setError("currency", "Please select a conversion currency."); ok = false; }
 
         return ok;
       }
@@ -818,23 +946,26 @@
 
         const eid = generateEventId();
         const eventTime = Date.now(); // 13-digit epoch milliseconds
+        const conversionValue = Number(fields.value.value);
+        const currency = fields.currency.value;
 
         const payload = {
           event: "lead_submission",
           event_id: eid,
           event_time: eventTime,
+          value: conversionValue,
+          currency: currency,
+          user_id: userId,
           user_data: {
-            event_id: eid,
-            email: fields.email.value.trim(),
-            user_id: userId,
+            email_address: fields.email.value.trim(),
             address: {
               first_name: fields.first_name.value.trim(),
               last_name: fields.last_name.value.trim(),
               country: fields.country.value
-            },
-            company_name: fields.company_name.value.trim(),
-            job_title: fields.job_title.value.trim()
-          }
+            }
+          },
+          company_name: fields.company_name.value.trim(),
+          job_title: fields.job_title.value.trim()
         };
 
         window.dataLayer.push(payload);
